@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: cue-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_SSL
+        value: "true"
+      - key: DB_SYNCHRONIZE
+        value: "false"
+      - key: DB_LOGGING
+        value: "false"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: MAX_UPLOAD_MB
+        value: "10"

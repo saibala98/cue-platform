@@ -154,6 +154,55 @@ npm run dev:demo      # local dev with VITE_DEMO_MODE=true
 npm run build:demo    # static build in frontend/dist, deployable anywhere
 ```
 
+## Production deployment (Neon + Render + Vercel)
+
+For a real, always-on deployment with a live backend and database (as opposed
+to the static [demo mode](#demo-mode-no-backend-no-database-no-api-costs)
+above). All three have free tiers.
+
+### 1. Database — Neon
+
+1. Create a project at [neon.tech](https://neon.tech), then copy its pooled
+   connection string (`postgresql://user:pass@host/dbname?sslmode=require`).
+2. Run the migration and seed once against it from your machine:
+   ```bash
+   cd backend
+   DATABASE_URL="<neon connection string>" DB_SSL=true npm run migration:run
+   DATABASE_URL="<neon connection string>" DB_SSL=true npm run seed   # optional — see Seed data above
+   ```
+   (PowerShell: `$env:DATABASE_URL="..."; $env:DB_SSL="true"; npm run migration:run`)
+
+### 2. Backend — Render
+
+[render.yaml](./render.yaml) at the repo root defines the service
+(`rootDir: backend`, builds with `npm run build`, runs `npm start`, health
+check at `/api/health`, generates `JWT_SECRET` automatically).
+
+1. In the Render dashboard: **New → Blueprint**, point it at this repo.
+2. When prompted, fill in the two secrets it doesn't generate:
+   - `DATABASE_URL` — the Neon connection string from step 1
+   - `CLIENT_ORIGIN` — your Vercel frontend URL (step 3) — can be filled in
+     after step 3, then redeploy
+3. Note the resulting backend URL, e.g. `https://cue-backend.onrender.com`.
+
+Uploaded LOB documents are **not** persisted — Render's default disk is
+ephemeral, so files written to `backend/uploads` are lost on redeploy/restart.
+Fine unless document upload is core to what you're demoing; otherwise it
+needs S3/R2-compatible storage or a Render persistent disk.
+
+### 3. Frontend — Vercel
+
+[frontend/vercel.json](./frontend/vercel.json) sets the build/output dirs and
+rewrites all routes to `index.html` so React Router's client-side routes
+survive a hard refresh.
+
+1. In Vercel: **New Project**, import this repo, set **Root Directory** to
+   `frontend`.
+2. Add an environment variable: `VITE_API_BASE_URL` = your Render backend URL
+   from step 2 (e.g. `https://cue-backend.onrender.com`).
+3. Deploy. Then go back to Render and set `CLIENT_ORIGIN` to this Vercel URL
+   so CORS allows it, and redeploy the backend.
+
 ## Security notes
 
 - Passwords are hashed with bcrypt (12 salt rounds), never stored or logged in plaintext.

@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-brand-black text-white;
+}
+
+/* Subtle dot-grid texture for full page backgrounds, replacing the old blueprint grid. */
+.page-bg {
+  background-color: #0a0a0a;
+  background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Faint repeating watermark for audit/compliance surfaces. */
+.watermark-immutable {
+  position: relative;
+  isolation: isolate;
+}
+.watermark-immutable::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: repeating-linear-gradient(
+    -30deg,
+    transparent 0,
+    transparent 140px,
+    #ffffff 140px,
+    #ffffff 141px,
+    transparent 141px,
+    transparent 280px
+  );
+  background-size: 400px 400px;
+}
+.watermark-immutable::after {
+  content: 'IMMUTABLE RECORD \00B7 IMMUTABLE RECORD \00B7 IMMUTABLE RECORD';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  color: #ffffff;
+  opacity: 0.025;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  line-height: 6rem;
+  white-space: pre-wrap;
+  transform: rotate(-8deg) scale(1.3);
+}
+
+h1,
+h2,
+h3 {
+  @apply font-display;
+}
+
+.h1 {
+  @apply text-[2.5rem] font-bold leading-tight text-white;
+}
+
+.h2 {
+  @apply text-2xl font-semibold text-white;
+}
+
+.h3 {
+  @apply text-xl font-semibold text-brand-green;
+}
+
+.mono {
+  @apply font-mono text-brand-pink;
+}
+
+.card {
+  @apply rounded-xl border border-brand-border bg-brand-dark p-6 transition-colors hover:border-brand-green;
+}
+
+.card-active {
+  @apply rounded-xl border-2 border-brand-green bg-brand-dark p-6 shadow-neon-green-soft;
+}
+
+.session-card {
+  @apply rounded-xl border border-brand-border bg-brand-dark p-6 transition-colors;
+}
+
+.session-card-complete {
+  @apply rounded-xl border border-brand-green bg-brand-dark p-6;
+  background-color: rgba(57, 255, 20, 0.05);
+}
+
+.checkbox-dot {
+  @apply flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-brand-faint;
+}
+
+.checkbox-dot-checked {
+  @apply flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-green text-brand-black;
+}
+
+/* -------- Buttons -------- */
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-2 text-sm font-semibold text-brand-black transition duration-150 hover:brightness-110 hover:shadow-neon-green disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:brightness-100;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-brand-pink bg-transparent px-4 py-2 text-sm font-medium text-brand-pink transition duration-150 hover:bg-brand-pink hover:text-white hover:shadow-neon-pink disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:bg-transparent disabled:hover:text-brand-pink;
+}
+
+.btn-danger {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-pink px-4 py-2 text-sm font-semibold text-white transition duration-150 hover:bg-[#cc0058] hover:shadow-neon-pink disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none;
+}
+
+/* -------- Form inputs -------- */
+
+.input-field {
+  @apply w-full rounded-lg border border-brand-border bg-brand-surface px-3 py-2 text-sm text-white placeholder:text-brand-faint transition duration-150 focus:border-2 focus:border-brand-green focus:shadow-neon-green-soft focus:outline-none;
+}
+
+.input-field-error {
+  @apply border-brand-pink focus:border-brand-pink focus:shadow-neon-pink-soft;
+}
+
+.label {
+  @apply mb-1 block text-sm font-medium text-brand-muted;
+}
+
+/* -------- Status badges -------- */
+
+.badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold;
+}
+
+.badge-completed {
+  @apply badge bg-brand-green text-brand-black;
+}
+
+.badge-on-track {
+  @apply badge border border-brand-green text-brand-green;
+}
+
+.badge-in-progress {
+  @apply badge bg-brand-pink text-white;
+}
+
+.badge-not-started {
+  @apply badge bg-brand-border text-brand-muted;
+}
+
+.badge-overdue {
+  @apply badge animate-pulse bg-brand-pink text-white;
+}
+
+/* -------- Tables -------- */
+
+.table-wrap {
+  @apply overflow-x-auto rounded-xl border border-brand-border bg-brand-dark;
+}
+
+.table-head {
+  @apply bg-brand-surface text-left text-xs uppercase tracking-wide text-brand-green;
+}
+
+.table-row {
+  @apply border-t border-brand-border bg-brand-dark transition-colors odd:bg-brand-dark even:bg-[#151515] hover:border-l-[3px] hover:border-l-brand-green;
+}
+
+/* -------- Glow utilities -------- */
+
+.glow-green {
+  box-shadow:
+    0 0 5px #39ff14,
+    0 0 10px #39ff14,
+    0 0 20px rgba(57, 255, 20, 0.3);
+}
+
+.glow-pink {
+  box-shadow:
+    0 0 5px #ff006e,
+    0 0 10px #ff006e,
+    0 0 20px rgba(255, 0, 110, 0.3);
+}
+
+/* -------- Progress bar -------- */
+
+.progress-track {
+  @apply h-2 w-full overflow-hidden rounded-full bg-brand-border;
+}
+
+.progress-fill {
+  @apply h-2 rounded-full bg-brand-green transition-all duration-500;
+}
